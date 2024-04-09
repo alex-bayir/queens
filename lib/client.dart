@@ -76,7 +76,7 @@ class ClientState extends State<Client> {
   void initState() {
     auto=AutoGamer(widget.id, desk, answer_sender, subscriptions);
     if(widget.id==0){
-      desk.set(desk.random_position(), Queen(widget.id));
+      desk.set(widget.id, Queen(widget.id));
     }else{
       gamers=widget.clients;
       Future.wait(
@@ -136,7 +136,7 @@ class ClientState extends State<Client> {
           children: [
             DeskWidget(
               desk: desk,
-              enable: (row,col)=>true,
+              enable: (row,col)=>col==widget.id,
               action: (row, col) {
                 final figure=desk.figures[widget.id];
                 if(figure!=null && figure.can_move(row, col, desk.position(figure).$1, desk.position(figure).$2)){

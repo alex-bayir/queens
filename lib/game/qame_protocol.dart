@@ -25,7 +25,7 @@ class GameProtocol {
   static Future<Map<String,dynamic>> join(Map<Socket,StreamSubscription> subscriptions, Desk desk, int id) async {
     Map<String,dynamic> answer;
     do{
-      answer=await try_goto((socket) => (v){}, subscriptions, desk, id, desk.random_position());
+      answer=await try_goto((socket) => (v){}, subscriptions, desk, id, id);
     }while(answer[allow]!=true);
     return answer;
   }

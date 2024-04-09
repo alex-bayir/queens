@@ -16,7 +16,6 @@ class AutoGamer{
 
   Map<String, dynamic> answer={};
   int drow=1;
-  int dcol=1;
   int moves=0;
 
   void change_player(int newid){
@@ -58,7 +57,6 @@ class AutoGamer{
           return -1;
         }else if(moves<=0){
           drow=answer[GameProtocol.row_attack] ? drow : 0;
-          dcol=answer[GameProtocol.col_attack] ? dcol : 0;
           moves=8;
           GameProtocol.change_player(answer_sender,subscriptions,current=(current+1)%(subscriptions.length+1)); answer={};
           return -1;
@@ -66,24 +64,18 @@ class AutoGamer{
       }else{
         if(answer[GameProtocol.position]!=null){
           final (frow,fcol)=desk.unconvert(answer[GameProtocol.position]);
-          dcol=(frow-row).normalize();
           drow=(fcol-col).normalize();
         }
       }
     }
-    if(drow==0 && dcol==0){
+    if(drow==0){
       drow=Random().nextBool() ? 1 : -1;
-      dcol=Random().nextBool() ? 1 : -1;
     }
 
     if(!(row+drow).between(-1, desk.rows)){
       drow=-drow;
     }
-    if(!(col+dcol).between(-1, desk.rows)){
-      dcol=-dcol;
-    }
     row=row+drow;
-    col=col+dcol;
 
     return GameProtocol.try_goto(answer_sender,subscriptions, desk, id, desk.convert(row, col)).then((value) {
       answer=value; moves--;
