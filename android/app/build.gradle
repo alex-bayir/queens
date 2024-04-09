@@ -1,0 +1,69 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    namespace "org.alex.bayir.queens"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId android.namespace
+        // You can update the following values to match your application needs.
+        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
+        compileSdk localProperties.getProperty('sdk.version.compile').toInteger() ?: flutter.compileSdkVersion
+        minSdkVersion localProperties.getProperty('sdk.version.min')?.toInteger() ?: flutter.minSdkVersion
+        targetSdkVersion localProperties.getProperty('sdk.version.target')?.toInteger() ?: flutter.targetSdkVersion
+        ndkVersion localProperties.getProperty('ndk.version') ?: flutter.ndkVersion
+        versionCode localProperties.getProperty('flutter.versionCode')?.toInteger() ?: 1
+        versionName localProperties.getProperty('flutter.versionName') ?: '1.0'
+    }
+    signingConfigs {
+       release {
+           keyAlias keystoreProperties['keyAlias']
+           keyPassword keystoreProperties['keyPassword']
+           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+           storePassword keystoreProperties['storePassword']
+       }
+   }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {}
