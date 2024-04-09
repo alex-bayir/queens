@@ -88,17 +88,12 @@ class Home extends StatelessWidget {
 }
 
 Future<ServerSocket?> openServerSocket(int port)=>NetworkInterface.list().then((value){
-  if(value.isEmpty){
-    print('No netowrok interfaces');
-    return null;
-  }else{
-    for(var interface in value){
-      for(var address in interface.addresses){
-        if(address.address.startsWith('192.168.')){
-          return ServerSocket.bind(address.address, port);
-        }
+  for(var interface in value){
+    for(var address in interface.addresses){
+      if(address.isPrivate){
+        return ServerSocket.bind(address.address, port);
       }
     }
-    print('No opened network adress');
   }
+  print('No opened network adress');
 });

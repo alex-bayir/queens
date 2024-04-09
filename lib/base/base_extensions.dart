@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 extension Integers on int{
@@ -29,4 +30,8 @@ extension StringData on Uint8List {
 
 extension JSON on String {
   dynamic get decoded=>json.decode(this);
+}
+
+extension Private on InternetAddress{
+  bool get isPrivate => (rawAddress[0]==192 && rawAddress[1]==168) || (rawAddress[0]==172 && 16<=rawAddress[1] && rawAddress[1]<=31) || rawAddress[0]==10;
 }
